@@ -1,0 +1,10 @@
+library(mlbench)
+data(BostonHousing)
+ols.fit <- lm(medv~.,data=BostonHousing)
+dat.res <- BostonHousing
+dat.res$mdev <- log((ols.fit$residuals)^2)
+t.res.ols <- lm(medv~.,data=dat.res)
+w.fgls <- exp(-t.res.ols$fitted.values)
+fgls.fit <- lm(medv~.,weights=w.fgls,data=BostonHousing)
+ols.fgls <- cbind(summary(ols.fit)$coef[,1:3],summary(fgls.fit)$coef[,1:3])
+round(ols.fgls,3)
